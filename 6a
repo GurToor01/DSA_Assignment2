@@ -1,33 +1,71 @@
-// Transpose of a matrix
-
 #include<iostream>
 using namespace std;
 
-int main(){
-    int m,n,arr[100][100],transpose[100][100];;
-    
-    cout<<"Enter number of rows and columns in the array : ";
-    cin>>m>>n;
+struct Element{
+    int i;
+    int j;
+    int x;
+};
 
-    cout<<"Enter elements in the array :";
-    for(int i=0; i<m; i++){
-        for(int j=0; j<n; j++){
-            cin>>arr[i][j];
+struct Sparse{
+    int m;
+    int n;
+    int num;
+    struct Element *e;
+
+    void create(){
+        cout<<"Enter number of rows : ";
+        cin>>m;
+        cout<<"Enter number of columns : ";
+        cin>>n;
+        cout<<"Enter number of non zero elements : "<<endl;
+        cin>>num;
+
+        e = new struct Element[num];
+
+        cout<<"Enter the non zero elements : (row column value)"<<endl;
+        for(int i=0; i<num; i++){
+        cin>>e[i].i>>e[i].j>>e[i].x;
         }
     }
 
-    for(int i=0; i<m; i++){
-        for(int j=0; j<n; j++){
-            transpose[j][i]=arr[i][j];
+    void display(){
+        int k=0;
+        for(int i=0; i<m; i++){
+            for(int j=0; j<n; j++){
+                if(e[k].i == i && e[k].j ==j){
+                    cout<<e[k].x<<" ";
+                    k++;
+                }
+                else{
+                    cout<<"0 ";
+                }
+            }
+            cout<<endl;
         }
     }
 
-    cout<<"Transpose of the given array is : "<<endl;
-    for(int i=0; i<n; i++){
-        for(int j=0; j<m; j++){
-            cout<<transpose[i][j]<<" ";
+    void transpose(){
+        int buffer;
+        for(int i=0; i<num; i++){
+            buffer = e[i].i;
+            e[i].i = e[i].j;
+            e[i].j = buffer;
         }
-        cout<<endl;
+        buffer=m;
+        m=n;
+        n=buffer;
     }
-    return 0;
-}
+
+              
+    };
+
+    int main(){
+        Sparse st;
+        
+        st.create();
+        st.display();
+        st.transpose();
+        cout<<"Transpose of the matrix is : "<<endl;
+        st.display();
+    }
